@@ -1,0 +1,28 @@
+{
+	"name": "DS_AmesProperty_CSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BlobStorage_Output",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "AmesProperty.csv",
+				"container": "sources"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add",
+				"type": "String"
+			}
+		]
+	}
+}
