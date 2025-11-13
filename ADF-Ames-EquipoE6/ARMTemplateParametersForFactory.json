@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADF-Ames-EquipoE6"
+		},
+		"LS_BlobStorage_Output_connectionString": {
+			"value": ""
+		},
+		"MongoConn_connectionString": {
+			"value": ""
+		},
+		"NeonConn_password": {
+			"value": ""
+		},
+		"MongoConn_properties_typeProperties_database": {
+			"value": "Test"
+		},
+		"NeonConn_properties_typeProperties_server": {
+			"value": "ep-lingering-river-a85szbey-pooler.eastus2.azure.neon.tech"
+		},
+		"NeonConn_properties_typeProperties_database": {
+			"value": "amesDB"
+		},
+		"NeonConn_properties_typeProperties_username": {
+			"value": "infrati"
+		}
+	}
+}
