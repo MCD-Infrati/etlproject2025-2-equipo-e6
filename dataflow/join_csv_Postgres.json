@@ -1,0 +1,89 @@
+{
+	"name": "join_csv_Postgres",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_AmesProperty_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Neon_amesdbtemp",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          {Exter Cond} as long,",
+				"          {Exter Qual} as long,",
+				"          {Heating QC} as long,",
+				"          {Kitchen Qual} as long,",
+				"          {MS Zoning} as long,",
+				"          pid as long,",
+				"          {Roof Style} as string,",
+				"          {Roof Matl} as string,",
+				"          {Exterior 1st} as string,",
+				"          {Exterior 2nd} as string,",
+				"          {Mas Vnr Type} as string,",
+				"          {Mas Vnr Area} as long,",
+				"          foundation as string,",
+				"          heating as string,",
+				"          {Central Air} as boolean,",
+				"          electrical as string,",
+				"          {1st Flr SF} as long,",
+				"          {2nd Flr SF} as long,",
+				"          {Low Qual Fin SF} as long,",
+				"          {Kitchen AbvGr} as long,",
+				"          {TotRms AbvGrd} as long,",
+				"          functional as string,",
+				"          fireplaces as long,",
+				"          {Fireplace Qu} as string,",
+				"          {Paved Drive} as string,",
+				"          {Wood Deck SF} as long,",
+				"          {Open Porch SF} as long,",
+				"          {Enclosed Porch} as long,",
+				"          {3Ssn Porch} as long,",
+				"          {Screen Porch} as long,",
+				"          fence as string,",
+				"          {MS SubClass} as long",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source2",
+				"select1, source2 join({PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add} == pid,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"source1 select(mapColumn(",
+				"          {PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}
