@@ -26,6 +26,9 @@
 				},
 				{
 					"name": "cast1"
+				},
+				{
+					"name": "cleanNulls"
 				}
 			],
 			"scriptLines": [
@@ -91,7 +94,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> fuenteCsv",
-				"cast1, fuentePostgres join({PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add} == fuentePostgres@pid,",
+				"cast1, fuentePostgres join(cast1@PID == fuentePostgres@pid,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
@@ -105,7 +108,8 @@
 				"          {Year Built} as integer,",
 				"          {Year Remod/Add} as integer",
 				"     ),",
-				"     errors: true) ~> cast1"
+				"     errors: true) ~> cast1",
+				"join1 derive(column2 = ERROR_FUNCTION('')) ~> cleanNulls"
 			]
 		}
 	}
