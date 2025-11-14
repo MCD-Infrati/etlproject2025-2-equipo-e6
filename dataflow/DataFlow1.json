@@ -109,7 +109,7 @@
 				"          {Year Remod/Add} as integer",
 				"     ),",
 				"     errors: true) ~> cast1",
-				"join1 derive(column2 = ERROR_FUNCTION('')) ~> cleanNulls"
+				"join1 derive() ~> cleanNulls"
 			]
 		}
 	}
