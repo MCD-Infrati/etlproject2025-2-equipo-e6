@@ -4,20 +4,20 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Nombre de instancia de Data Factory",
+			"metadata": "Data Factory name",
 			"defaultValue": "ADF-Ames-EquipoE6"
 		},
 		"LS_BlobStorage_Output_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"LS_BlobStorage_Output\""
+			"metadata": "Secure string for 'connectionString' of 'LS_BlobStorage_Output'"
 		},
 		"MongoConn_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"MongoConn\""
+			"metadata": "Secure string for 'connectionString' of 'MongoConn'"
 		},
 		"NeonConn_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"NeonConn\""
+			"metadata": "Secure string for 'password' of 'NeonConn'"
 		},
 		"MongoConn_properties_typeProperties_database": {
 			"type": "string",
@@ -108,20 +108,306 @@
 						"fileName": "AmesProperty.csv",
 						"container": "sources"
 					},
-					"columnDelimiter": ",",
+					"columnDelimiter": ";",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
 					{
-						"name": "PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add",
+						"name": "PID",
+						"type": "String"
+					},
+					{
+						"name": "Lot Frontage",
+						"type": "String"
+					},
+					{
+						"name": "Lot Area",
+						"type": "String"
+					},
+					{
+						"name": "Street",
+						"type": "String"
+					},
+					{
+						"name": "Alley",
+						"type": "String"
+					},
+					{
+						"name": "Lot Shape",
+						"type": "String"
+					},
+					{
+						"name": "Land Contour",
+						"type": "String"
+					},
+					{
+						"name": "Utilities",
+						"type": "String"
+					},
+					{
+						"name": "Lot Config",
+						"type": "String"
+					},
+					{
+						"name": "Land Slope",
+						"type": "String"
+					},
+					{
+						"name": "Neighborhood",
+						"type": "String"
+					},
+					{
+						"name": "Condition 1",
+						"type": "String"
+					},
+					{
+						"name": "Condition 2",
+						"type": "String"
+					},
+					{
+						"name": "Bldg Type",
+						"type": "String"
+					},
+					{
+						"name": "House Style",
+						"type": "String"
+					},
+					{
+						"name": "Overall Qual",
+						"type": "String"
+					},
+					{
+						"name": "Overall Cond",
+						"type": "String"
+					},
+					{
+						"name": "Year Built",
+						"type": "String"
+					},
+					{
+						"name": "Year Remod/Add",
 						"type": "String"
 					}
 				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_BlobStorage_Output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Neon_amesdbtemp')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "NeonConn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzurePostgreSqlTable",
+				"schema": [
+					{
+						"name": "Exter Cond",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Exter Qual",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Heating QC",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Kitchen Qual",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MS Zoning",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "pid",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Roof Style",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Roof Matl",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Exterior 1st",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Exterior 2nd",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Mas Vnr Type",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Mas Vnr Area",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "foundation",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "heating",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Central Air",
+						"type": "boolean",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "electrical",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "1st Flr SF",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "2nd Flr SF",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Low Qual Fin SF",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Kitchen AbvGr",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "TotRms AbvGrd",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "functional",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "fireplaces",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Fireplace Qu",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Paved Drive",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Wood Deck SF",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Open Porch SF",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Enclosed Porch",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "3Ssn Porch",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Screen Porch",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "fence",
+						"type": "character varying",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MS SubClass",
+						"type": "bigint",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "public",
+					"table": "amesdbtemp"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/NeonConn')]"
 			]
 		},
 		{
@@ -150,6 +436,137 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_BlobStorage_Output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DataFlow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Neon_amesdbtemp",
+								"type": "DatasetReference"
+							},
+							"name": "fuentePostgres"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_AmesProperty_CSV",
+								"type": "DatasetReference"
+							},
+							"name": "fuenteCsv"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Salida_CSV",
+								"type": "DatasetReference"
+							},
+							"name": "salidaCsv"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						},
+						{
+							"name": "cast1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          {Exter Cond} as long,",
+						"          {Exter Qual} as long,",
+						"          {Heating QC} as long,",
+						"          {Kitchen Qual} as long,",
+						"          {MS Zoning} as long,",
+						"          pid as long,",
+						"          {Roof Style} as string,",
+						"          {Roof Matl} as string,",
+						"          {Exterior 1st} as string,",
+						"          {Exterior 2nd} as string,",
+						"          {Mas Vnr Type} as string,",
+						"          {Mas Vnr Area} as long,",
+						"          foundation as string,",
+						"          heating as string,",
+						"          {Central Air} as boolean,",
+						"          electrical as string,",
+						"          {1st Flr SF} as long,",
+						"          {2nd Flr SF} as long,",
+						"          {Low Qual Fin SF} as long,",
+						"          {Kitchen AbvGr} as long,",
+						"          {TotRms AbvGrd} as long,",
+						"          functional as string,",
+						"          fireplaces as long,",
+						"          {Fireplace Qu} as string,",
+						"          {Paved Drive} as string,",
+						"          {Wood Deck SF} as long,",
+						"          {Open Porch SF} as long,",
+						"          {Enclosed Porch} as long,",
+						"          {3Ssn Porch} as long,",
+						"          {Screen Porch} as long,",
+						"          fence as string,",
+						"          {MS SubClass} as long",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> fuentePostgres",
+						"source(output(",
+						"          PID as string,",
+						"          {Lot Frontage} as string,",
+						"          {Lot Area} as string,",
+						"          Street as string,",
+						"          Alley as string,",
+						"          {Lot Shape} as string,",
+						"          {Land Contour} as string,",
+						"          Utilities as string,",
+						"          {Lot Config} as string,",
+						"          {Land Slope} as string,",
+						"          Neighborhood as string,",
+						"          {Condition 1} as string,",
+						"          {Condition 2} as string,",
+						"          {Bldg Type} as string,",
+						"          {House Style} as string,",
+						"          {Overall Qual} as string,",
+						"          {Overall Cond} as string,",
+						"          {Year Built} as string,",
+						"          {Year Remod/Add} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> fuenteCsv",
+						"cast1, fuentePostgres join(cast1@PID == fuentePostgres@pid,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"fuenteCsv cast(output(",
+						"          PID as integer,",
+						"          {Lot Frontage} as integer,",
+						"          {Lot Area} as integer,",
+						"          {Overall Qual} as integer,",
+						"          {Overall Cond} as integer,",
+						"          {Year Built} as integer,",
+						"          {Year Remod/Add} as integer",
+						"     ),",
+						"     errors: true) ~> cast1",
+						"join1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> salidaCsv"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Neon_amesdbtemp')]",
+				"[concat(variables('factoryId'), '/datasets/DS_AmesProperty_CSV')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Salida_CSV')]"
 			]
 		}
 	]
