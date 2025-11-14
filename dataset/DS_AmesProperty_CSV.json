@@ -13,7 +13,7 @@
 				"fileName": "AmesProperty.csv",
 				"container": "sources"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": ";",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
