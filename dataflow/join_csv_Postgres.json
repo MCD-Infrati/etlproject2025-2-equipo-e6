@@ -6,35 +6,26 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DS_AmesProperty_CSV",
-						"type": "DatasetReference"
-					},
-					"name": "source1"
-				},
-				{
-					"dataset": {
 						"referenceName": "DS_Neon_amesdbtemp",
 						"type": "DatasetReference"
 					},
-					"name": "source2"
+					"name": "fuentePostgres"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_AmesProperty_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "fuenteCsv"
 				}
 			],
 			"sinks": [],
 			"transformations": [
 				{
 					"name": "join1"
-				},
-				{
-					"name": "select1"
 				}
 			],
 			"scriptLines": [
-				"source(output(",
-				"          {PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add} as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
 				"source(output(",
 				"          {Exter Cond} as long,",
 				"          {Exter Qual} as long,",
@@ -72,17 +63,18 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source2",
-				"select1, source2 join({PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add} == pid,",
+				"     format: 'table') ~> fuentePostgres",
+				"source(output(",
+				"          {PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> fuenteCsv",
+				"fuenteCsv, fuentePostgres join({PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add} == pid,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
-				"source1 select(mapColumn(",
-				"          {PID;Lot Frontage;Lot Area;Street;Alley;Lot Shape;Land Contour;Utilities;Lot Config;Land Slope;Neighborhood;Condition 1;Condition 2;Bldg Type;House Style;Overall Qual;Overall Cond;Year Built;Year Remod/Add}",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     broadcast: 'auto')~> join1"
 			]
 		}
 	}
