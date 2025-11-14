@@ -19,7 +19,15 @@
 					"name": "fuenteCsv"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Salida_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "salidaCsv"
+				}
+			],
 			"transformations": [
 				{
 					"name": "join1"
@@ -105,7 +113,11 @@
 				"          {Year Built} as integer,",
 				"          {Year Remod/Add} as integer",
 				"     ),",
-				"     errors: true) ~> cast1"
+				"     errors: true) ~> cast1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> salidaCsv"
 			]
 		}
 	}
