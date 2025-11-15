@@ -4,20 +4,20 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "ADF-Ames-EquipoE6"
 		},
 		"LS_BlobStorage_Output_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_BlobStorage_Output'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"LS_BlobStorage_Output\""
 		},
 		"MongoConn_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'MongoConn'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"MongoConn\""
 		},
 		"NeonConn_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'NeonConn'"
+			"metadata": "Cadena protegida para \"password\"de \"NeonConn\""
 		},
 		"MongoConn_properties_typeProperties_database": {
 			"type": "string",
@@ -37,11 +37,11 @@
 		},
 		"containerUri": {
 			"type": "string",
-			"metadata": "URI to storage account containing linked ARM templates"
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
 		},
 		"containerSasToken": {
 			"type": "string",
-			"metadata": "Sas token to storage account containing linked ARM templates"
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
 		}
 	},
 	"variables": {
