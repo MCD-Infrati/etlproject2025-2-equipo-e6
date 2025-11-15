@@ -1,0 +1,9 @@
+{
+	"name": "ADF-Ames-EquipoE6",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "915d4e19-305c-4834-9d60-7da57ca5db9a",
+		"tenantId": "e994072b-523e-4bfe-86e2-442c5e10b244"
+	}
+}
