@@ -669,7 +669,7 @@
 								"referenceName": "DS_Neon_amesdbtemp",
 								"type": "DatasetReference"
 							},
-							"name": "fuentePostgres"
+							"name": "DSNeonamesdbtemp"
 						},
 						{
 							"dataset": {
@@ -677,6 +677,20 @@
 								"type": "DatasetReference"
 							},
 							"name": "fuenteCsv"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Neon_SaleProperty",
+								"type": "DatasetReference"
+							},
+							"name": "DSNeonSaleProperty"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Neon_FloorDetail",
+								"type": "DatasetReference"
+							},
+							"name": "DSNeonFloorDetail"
 						}
 					],
 					"sinks": [
@@ -685,15 +699,18 @@
 								"referenceName": "DS_Salida_CSV",
 								"type": "DatasetReference"
 							},
-							"name": "salidaCsv"
+							"name": "sink1"
 						}
 					],
 					"transformations": [
 						{
+							"name": "cast1"
+						},
+						{
 							"name": "join1"
 						},
 						{
-							"name": "cast1"
+							"name": "join2"
 						}
 					],
 					"scriptLines": [
@@ -734,7 +751,7 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> fuentePostgres",
+						"     format: 'table') ~> DSNeonamesdbtemp",
 						"source(output(",
 						"          PID as string,",
 						"          {Lot Frontage} as string,",
@@ -759,11 +776,28 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> fuenteCsv",
-						"cast1, fuentePostgres join(cast1@PID == fuentePostgres@pid,",
-						"     joinType:'left',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join1",
+						"source(output(",
+						"          pid as long,",
+						"          {Sale Date} as timestamp,",
+						"          {Sale Type} as string,",
+						"          {Sale Condition} as string,",
+						"          saleprice as long",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> DSNeonSaleProperty",
+						"source(output(",
+						"          pid as long,",
+						"          Floor as long,",
+						"          bedrooms as long,",
+						"          {Full Bath} as long,",
+						"          {Half Bath} as long",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> DSNeonFloorDetail",
 						"fuenteCsv cast(output(",
 						"          PID as integer,",
 						"          {Lot Frontage} as integer,",
@@ -774,16 +808,28 @@
 						"          {Year Remod/Add} as integer",
 						"     ),",
 						"     errors: true) ~> cast1",
-						"join1 sink(allowSchemaDrift: true,",
+						"cast1, DSNeonamesdbtemp join(cast1@PID == DSNeonamesdbtemp@pid,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1, DSNeonSaleProperty join(cast1@PID == DSNeonSaleProperty@pid,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> salidaCsv"
+						"     skipDuplicateMapOutputs: true) ~> sink1"
 					]
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_Neon_amesdbtemp')]",
 				"[concat(variables('factoryId'), '/datasets/DS_AmesProperty_CSV')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Neon_SaleProperty')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Neon_FloorDetail')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Salida_CSV')]"
 			]
 		}
