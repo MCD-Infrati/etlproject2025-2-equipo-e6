@@ -33,15 +33,7 @@
 					"name": "DSNeonFloorDetail"
 				}
 			],
-			"sinks": [
-				{
-					"dataset": {
-						"referenceName": "DS_Salida_CSV",
-						"type": "DatasetReference"
-					},
-					"name": "salidaCsv"
-				}
-			],
+			"sinks": [],
 			"transformations": [
 				{
 					"name": "cast1"
@@ -51,9 +43,6 @@
 				},
 				{
 					"name": "join2"
-				},
-				{
-					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -160,12 +149,7 @@
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join2",
-				"DSNeonFloorDetail aggregate() ~> aggregate1",
-				"join1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> salidaCsv"
+				"     broadcast: 'auto')~> join2"
 			]
 		}
 	}
