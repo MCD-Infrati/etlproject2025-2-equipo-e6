@@ -51,6 +51,12 @@
 				},
 				{
 					"name": "join2"
+				},
+				{
+					"name": "FloorAgg"
+				},
+				{
+					"name": "join3"
 				}
 			],
 			"scriptLines": [
@@ -158,6 +164,15 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join2",
+				"DSNeonFloorDetail aggregate(groupBy(pid),",
+				"     TotalFullBath = sum({Full Bath}),",
+				"          TotalHalfBath = sum({Half Bath}),",
+				"          TotalBedrooms = sum(bedrooms)) ~> FloorAgg",
+				"join2, FloorAgg join(cast1@PID == FloorAgg@pid,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
 				"join2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
