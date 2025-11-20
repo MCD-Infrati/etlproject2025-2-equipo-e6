@@ -691,6 +691,20 @@
 								"type": "DatasetReference"
 							},
 							"name": "DSNeonFloorDetail"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Neon_MsZoning",
+								"type": "DatasetReference"
+							},
+							"name": "DSNeonMsZooning"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Neon_MsSubClass",
+								"type": "DatasetReference"
+							},
+							"name": "DSNeonMsSubClass"
 						}
 					],
 					"sinks": [
@@ -717,6 +731,12 @@
 						},
 						{
 							"name": "join3"
+						},
+						{
+							"name": "join4"
+						},
+						{
+							"name": "join5"
 						}
 					],
 					"scriptLines": [
@@ -804,6 +824,23 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> DSNeonFloorDetail",
+						"source(output(",
+						"          id as long,",
+						"          description as string,",
+						"          code as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> DSNeonMsZooning",
+						"source(output(",
+						"          description as string,",
+						"          code as long",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> DSNeonMsSubClass",
 						"fuenteCsv cast(output(",
 						"          PID as integer,",
 						"          {Lot Frontage} as integer,",
@@ -833,6 +870,16 @@
 						"     matchType:'exact',",
 						"     ignoreSpaces: false,",
 						"     broadcast: 'auto')~> join3",
+						"join3, DSNeonMsZooning join({MS Zoning} == id,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join4",
+						"join4, DSNeonMsSubClass join({MS SubClass} == DSNeonMsSubClass@code,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join5",
 						"join2 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     skipDuplicateMapInputs: true,",
@@ -845,6 +892,8 @@
 				"[concat(variables('factoryId'), '/datasets/DS_AmesProperty_CSV')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Neon_SaleProperty')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Neon_FloorDetail')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Neon_MsZoning')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Neon_MsSubClass')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Salida_CSV')]"
 			]
 		}
