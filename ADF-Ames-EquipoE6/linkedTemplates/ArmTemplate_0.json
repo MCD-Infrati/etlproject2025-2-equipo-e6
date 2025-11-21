@@ -15,13 +15,17 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"MongoConn\""
 		},
+		"Mongo_BlobStorage_Output_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"Mongo_BlobStorage_Output\""
+		},
 		"NeonConn_password": {
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"password\"de \"NeonConn\""
 		},
 		"MongoConn_properties_typeProperties_database": {
 			"type": "string",
-			"defaultValue": "Test"
+			"defaultValue": "test"
 		},
 		"NeonConn_properties_typeProperties_server": {
 			"type": "string",
@@ -64,6 +68,19 @@
 					"connectionString": "[parameters('MongoConn_connectionString')]",
 					"database": "[parameters('MongoConn_properties_typeProperties_database')]",
 					"driverVersion": "v2"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Mongo_BlobStorage_Output')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('Mongo_BlobStorage_Output_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -194,6 +211,90 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_BlobStorage_Output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Bsmt_CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Mongo_BlobStorage_Output",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "bsmt.csv",
+						"container": "mongotocsv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Mongo_BlobStorage_Output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Garage_CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Mongo_BlobStorage_Output",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "garage.csv",
+						"container": "mongotocsv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Mongo_BlobStorage_Output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Misc_CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Mongo_BlobStorage_Output",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "misc.csv",
+						"container": "mongotocsv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Mongo_BlobStorage_Output')]"
 			]
 		},
 		{
@@ -629,6 +730,34 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_Pool_CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Mongo_BlobStorage_Output",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "pool.csv",
+						"container": "mongotocsv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Mongo_BlobStorage_Output')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_Salida_CSV')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -657,244 +786,83 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DataFlow1')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
+			"name": "[concat(parameters('factoryName'), '/MongoDbBsmt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"type": "MappingDataFlow",
+				"linkedServiceName": {
+					"referenceName": "MongoConn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MongoDbAtlasCollection",
+				"schema": [],
 				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DS_Neon_amesdbtemp",
-								"type": "DatasetReference"
-							},
-							"name": "DSNeonamesdbtemp"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_AmesProperty_CSV",
-								"type": "DatasetReference"
-							},
-							"name": "fuenteCsv"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Neon_SaleProperty",
-								"type": "DatasetReference"
-							},
-							"name": "DSNeonSaleProperty"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Neon_FloorDetail",
-								"type": "DatasetReference"
-							},
-							"name": "DSNeonFloorDetail"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Neon_MsZoning",
-								"type": "DatasetReference"
-							},
-							"name": "DSNeonMsZooning"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Neon_MsSubClass",
-								"type": "DatasetReference"
-							},
-							"name": "DSNeonMsSubClass"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DS_Salida_CSV",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "cast1"
-						},
-						{
-							"name": "join1"
-						},
-						{
-							"name": "join2"
-						},
-						{
-							"name": "FloorAgg"
-						},
-						{
-							"name": "join3"
-						},
-						{
-							"name": "join4"
-						},
-						{
-							"name": "join5"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          {Exter Cond} as long,",
-						"          {Exter Qual} as long,",
-						"          {Heating QC} as long,",
-						"          {Kitchen Qual} as long,",
-						"          {MS Zoning} as long,",
-						"          pid as long,",
-						"          {Roof Style} as string,",
-						"          {Roof Matl} as string,",
-						"          {Exterior 1st} as string,",
-						"          {Exterior 2nd} as string,",
-						"          {Mas Vnr Type} as string,",
-						"          {Mas Vnr Area} as long,",
-						"          foundation as string,",
-						"          heating as string,",
-						"          {Central Air} as boolean,",
-						"          electrical as string,",
-						"          {1st Flr SF} as long,",
-						"          {2nd Flr SF} as long,",
-						"          {Low Qual Fin SF} as long,",
-						"          {Kitchen AbvGr} as long,",
-						"          {TotRms AbvGrd} as long,",
-						"          functional as string,",
-						"          fireplaces as long,",
-						"          {Fireplace Qu} as string,",
-						"          {Paved Drive} as string,",
-						"          {Wood Deck SF} as long,",
-						"          {Open Porch SF} as long,",
-						"          {Enclosed Porch} as long,",
-						"          {3Ssn Porch} as long,",
-						"          {Screen Porch} as long,",
-						"          fence as string,",
-						"          {MS SubClass} as long",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> DSNeonamesdbtemp",
-						"source(output(",
-						"          PID as string,",
-						"          {Lot Frontage} as string,",
-						"          {Lot Area} as string,",
-						"          Street as string,",
-						"          Alley as string,",
-						"          {Lot Shape} as string,",
-						"          {Land Contour} as string,",
-						"          Utilities as string,",
-						"          {Lot Config} as string,",
-						"          {Land Slope} as string,",
-						"          Neighborhood as string,",
-						"          {Condition 1} as string,",
-						"          {Condition 2} as string,",
-						"          {Bldg Type} as string,",
-						"          {House Style} as string,",
-						"          {Overall Qual} as string,",
-						"          {Overall Cond} as string,",
-						"          {Year Built} as string,",
-						"          {Year Remod/Add} as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> fuenteCsv",
-						"source(output(",
-						"          pid as long,",
-						"          {Sale Date} as timestamp,",
-						"          {Sale Type} as string,",
-						"          {Sale Condition} as string,",
-						"          saleprice as long",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> DSNeonSaleProperty",
-						"source(output(",
-						"          pid as long,",
-						"          Floor as long,",
-						"          bedrooms as long,",
-						"          {Full Bath} as long,",
-						"          {Half Bath} as long",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> DSNeonFloorDetail",
-						"source(output(",
-						"          id as long,",
-						"          description as string,",
-						"          code as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> DSNeonMsZooning",
-						"source(output(",
-						"          description as string,",
-						"          code as long",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> DSNeonMsSubClass",
-						"fuenteCsv cast(output(",
-						"          PID as integer,",
-						"          {Lot Frontage} as integer,",
-						"          {Lot Area} as integer,",
-						"          {Overall Qual} as integer,",
-						"          {Overall Cond} as integer,",
-						"          {Year Built} as integer,",
-						"          {Year Remod/Add} as integer",
-						"     ),",
-						"     errors: true) ~> cast1",
-						"cast1, DSNeonamesdbtemp join(cast1@PID == DSNeonamesdbtemp@pid,",
-						"     joinType:'left',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join1",
-						"join1, DSNeonSaleProperty join(cast1@PID == DSNeonSaleProperty@pid,",
-						"     joinType:'left',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join2",
-						"DSNeonFloorDetail aggregate(groupBy(pid),",
-						"     TotalFullBath = sum({Full Bath}),",
-						"          TotalHalfBath = sum({Half Bath}),",
-						"          TotalBedrooms = sum(bedrooms)) ~> FloorAgg",
-						"join2, FloorAgg join(cast1@PID == FloorAgg@pid,",
-						"     joinType:'left',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join3",
-						"join3, DSNeonMsZooning join({MS Zoning} == id,",
-						"     joinType:'left',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join4",
-						"join4, DSNeonMsSubClass join({MS SubClass} == DSNeonMsSubClass@code,",
-						"     joinType:'left',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> join5",
-						"join2 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink1"
-					]
+					"collection": "bsmt"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_Neon_amesdbtemp')]",
-				"[concat(variables('factoryId'), '/datasets/DS_AmesProperty_CSV')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Neon_SaleProperty')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Neon_FloorDetail')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Neon_MsZoning')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Neon_MsSubClass')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Salida_CSV')]"
+				"[concat(variables('factoryId'), '/linkedServices/MongoConn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MongoDbGarage')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "MongoConn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MongoDbAtlasCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "garage"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MongoConn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MongoDbMisc')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "MongoConn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MongoDbAtlasCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "misc"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MongoConn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MongoDbPool')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "MongoConn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MongoDbAtlasCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "pool"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MongoConn')]"
 			]
 		}
 	]

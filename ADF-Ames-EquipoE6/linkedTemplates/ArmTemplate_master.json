@@ -15,13 +15,17 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"MongoConn\""
 		},
+		"Mongo_BlobStorage_Output_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"Mongo_BlobStorage_Output\""
+		},
 		"NeonConn_password": {
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"password\"de \"NeonConn\""
 		},
 		"MongoConn_properties_typeProperties_database": {
 			"type": "string",
-			"defaultValue": "Test"
+			"defaultValue": "test"
 		},
 		"NeonConn_properties_typeProperties_server": {
 			"type": "string",
@@ -68,6 +72,9 @@
 					"MongoConn_connectionString": {
 						"value": "[parameters('MongoConn_connectionString')]"
 					},
+					"Mongo_BlobStorage_Output_connectionString": {
+						"value": "[parameters('Mongo_BlobStorage_Output_connectionString')]"
+					},
 					"NeonConn_password": {
 						"value": "[parameters('NeonConn_password')]"
 					},
@@ -86,6 +93,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "ADF-Ames-EquipoE6_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADF-Ames-EquipoE6_ArmTemplate_0')]"
+			]
 		}
 	]
 }

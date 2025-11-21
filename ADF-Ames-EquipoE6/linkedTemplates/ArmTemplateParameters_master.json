@@ -11,11 +11,14 @@
 		"MongoConn_connectionString": {
 			"value": ""
 		},
+		"Mongo_BlobStorage_Output_connectionString": {
+			"value": ""
+		},
 		"NeonConn_password": {
 			"value": ""
 		},
 		"MongoConn_properties_typeProperties_database": {
-			"value": "Test"
+			"value": "test"
 		},
 		"NeonConn_properties_typeProperties_server": {
 			"value": "ep-lingering-river-a85szbey-pooler.eastus2.azure.neon.tech"
