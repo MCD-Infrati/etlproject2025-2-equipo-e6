@@ -61,11 +61,6 @@
 				"typeProperties": {
 					"source": {
 						"type": "MongoDbAtlasSource",
-						"additionalColumns": [
-							{
-								"value": "$$COLUMN:"
-							}
-						],
 						"batchSize": 100
 					},
 					"sink": {
