@@ -78,24 +78,6 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DS_Salida_CSV",
-						"type": "DatasetReference"
-					},
-					"name": "sink1"
-				},
-				{
-					"dataset": {
-						"referenceName": "DS_Join6_Debug",
-						"type": "DatasetReference"
-					},
-					"name": "pruebajoins",
-					"rejectedDataLinkedService": {
-						"referenceName": "Mongo_Storage",
-						"type": "LinkedServiceReference"
-					}
-				},
-				{
-					"dataset": {
 						"referenceName": "output_final",
 						"type": "DatasetReference"
 					},
@@ -589,14 +571,6 @@
 				"          each(match(type=='string'), $$ = iifNull($$,'NA')),",
 				"          each(match(type=='long'), $$ = iifNull($$,0)),",
 				"          each(match(type=='short'), $$ = iifNull($$,0))) ~> derivedColumn1",
-				"Transformaciones sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1",
-				"join6 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> pruebajoins",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: true,",
 				"     partitionFileNames:['output.csv'],",
