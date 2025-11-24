@@ -571,7 +571,7 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join8",
-				"join8, selectMisc join(selectMisc@PID == selectMisc@PID,",
+				"join8, selectMisc join(selectPool@PID == selectMisc@PID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
