@@ -16,7 +16,7 @@
 						"referenceName": "DS_AmesProperty_CSV",
 						"type": "DatasetReference"
 					},
-					"name": "output"
+					"name": "DSAmesProperty"
 				},
 				{
 					"dataset": {
@@ -78,13 +78,6 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DS_Salida_CSV",
-						"type": "DatasetReference"
-					},
-					"name": "sink1"
-				},
-				{
-					"dataset": {
 						"referenceName": "DS_Join6_Debug",
 						"type": "DatasetReference"
 					},
@@ -128,19 +121,19 @@
 					"name": "LimpiezaNulos"
 				},
 				{
-					"name": "select2"
+					"name": "selectMsSubClass"
 				},
 				{
-					"name": "select3"
+					"name": "SelectFloorDetail"
 				},
 				{
-					"name": "select4"
+					"name": "SelectSaleProperty"
 				},
 				{
-					"name": "select5"
+					"name": "SelectMsZoning"
 				},
 				{
-					"name": "select6"
+					"name": "selectAmesDb"
 				},
 				{
 					"name": "select7"
@@ -238,7 +231,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> output",
+				"     ignoreNoFilesFound: false) ~> DSAmesProperty",
 				"source(output(",
 				"          pid as long,",
 				"          {Sale Date} as timestamp,",
@@ -330,7 +323,7 @@
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> BsmtCSV",
-				"output cast(output(",
+				"DSAmesProperty cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
 				"          {Lot Area} as integer,",
@@ -340,17 +333,17 @@
 				"          {Year Remod/Add} as integer",
 				"     ),",
 				"     errors: true) ~> cast1",
-				"cast1, select6 join(cast1@PID == select6@PID,",
+				"cast1, selectAmesDb join(cast1@PID == selectAmesDb@PID,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"join1, select4 join(cast1@PID == select4@PID,",
+				"join1, SelectSaleProperty join(cast1@PID == SelectSaleProperty@PID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join2",
-				"select3 aggregate(groupBy(PID),",
+				"SelectFloorDetail aggregate(groupBy(PID),",
 				"     TotalFullBath = sum({Full Bath}),",
 				"          TotalHalfBath = sum({Half Bath}),",
 				"          TotalBedrooms = sum(bedrooms)) ~> FloorAgg",
@@ -359,12 +352,12 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join3",
-				"join3, select5 join({MS Zoning} == id,",
+				"join3, SelectMsZoning join({MS Zoning} == id,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join4",
-				"join4, select2 join({MS SubClass} == {code MsSubClass},",
+				"join4, selectMsSubClass join({MS SubClass} == {code MsSubClass},",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
@@ -377,7 +370,7 @@
 				"          {code MsSubClass} = code",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select2",
+				"     skipDuplicateMapOutputs: true) ~> selectMsSubClass",
 				"DSNeonFloorDetail select(mapColumn(",
 				"          PID = pid,",
 				"          Floor,",
@@ -386,7 +379,7 @@
 				"          {Half Bath}",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select3",
+				"     skipDuplicateMapOutputs: true) ~> SelectFloorDetail",
 				"DSNeonSaleProperty select(mapColumn(",
 				"          PID = pid,",
 				"          {Sale Date},",
@@ -395,14 +388,14 @@
 				"          saleprice",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select4",
+				"     skipDuplicateMapOutputs: true) ~> SelectSaleProperty",
 				"DSNeonMsZooning select(mapColumn(",
 				"          id,",
 				"          {description MsZoning} = description,",
 				"          {code MsZoning} = code",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select5",
+				"     skipDuplicateMapOutputs: true) ~> SelectMsZoning",
 				"DSNeonamesdbtemp select(mapColumn(",
 				"          {Exter Cond},",
 				"          {Exter Qual},",
@@ -438,7 +431,7 @@
 				"          {MS SubClass}",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select6",
+				"     skipDuplicateMapOutputs: true) ~> selectAmesDb",
 				"join5 select(mapColumn(",
 				"          PID = cast1@PID,",
 				"          {Lot Frontage},",
@@ -582,10 +575,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select8",
-				"Transformaciones sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1",
 				"join6 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
