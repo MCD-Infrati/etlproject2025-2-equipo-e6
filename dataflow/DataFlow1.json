@@ -155,6 +155,18 @@
 				},
 				{
 					"name": "join6"
+				},
+				{
+					"name": "join7"
+				},
+				{
+					"name": "join8"
+				},
+				{
+					"name": "join9"
+				},
+				{
+					"name": "select8"
 				}
 			],
 			"scriptLines": [
@@ -537,11 +549,32 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectBsmt",
-				"selectGarage, join5 join(selectGarage@PID == cast1@PID,",
+				"join5, selectGarage join(selectGarage@PID == cast1@PID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join6",
+				"join6, selectPool join(selectPool@PID == cast1@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join7",
+				"join7, selectBsmt join(selectBsmt@PID == cast1@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join8",
+				"join8, selectMisc join(selectMisc@PID == cast1@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join9",
+				"join9 select(mapColumn(",
+				"          each(match(/* All input columns */ true()),",
+				"               /* Input name */ $$ = $$)",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select8",
 				"Transformaciones sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
