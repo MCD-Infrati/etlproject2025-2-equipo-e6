@@ -99,7 +99,11 @@
 						"referenceName": "output_final",
 						"type": "DatasetReference"
 					},
-					"name": "sink2"
+					"name": "sink2",
+					"rejectedDataLinkedService": {
+						"referenceName": "Mongo_Storage",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -597,10 +601,13 @@
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> pruebajoins",
-				"derivedColumn1 sink(allowSchemaDrift: false,",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: true,",
+				"     partitionFileNames:['output.csv'],",
+				"     truncate: true,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink2"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2"
 			]
 		}
 	}
