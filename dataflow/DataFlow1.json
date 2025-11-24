@@ -45,6 +45,27 @@
 						"type": "DatasetReference"
 					},
 					"name": "DSNeonMsSubClass"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Garage_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "MongoGarage"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Bsmt_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "MongoBsmt"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Pool_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "MongoPool"
 				}
 			],
 			"sinks": [
@@ -199,6 +220,17 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DSNeonMsSubClass",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false) ~> MongoGarage",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false) ~> MongoBsmt",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> MongoPool",
 				"fuenteCsv cast(output(",
 				"          PID as integer,",
 				"          {Lot Frontage} as integer,",
