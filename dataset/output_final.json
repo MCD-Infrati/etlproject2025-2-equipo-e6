@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "output.csv",
-				"container": "output"
+				"fileName": "part-00000-4faf250a-67b0-4edb-815e-2c1b0deb59d6-c000.csv",
+				"container": "mongotocsv"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
