@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "garage",
 				"container": "mongotocsv"
 			},
 			"columnDelimiter": ",",
