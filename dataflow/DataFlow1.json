@@ -78,24 +78,6 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DS_Salida_CSV",
-						"type": "DatasetReference"
-					},
-					"name": "sink1"
-				},
-				{
-					"dataset": {
-						"referenceName": "DS_Join6_Debug",
-						"type": "DatasetReference"
-					},
-					"name": "pruebajoins",
-					"rejectedDataLinkedService": {
-						"referenceName": "Mongo_Storage",
-						"type": "LinkedServiceReference"
-					}
-				},
-				{
-					"dataset": {
 						"referenceName": "output_final",
 						"type": "DatasetReference"
 					},
@@ -808,8 +790,7 @@
 				"iif({MS Zoning} == 4, 'FV',",
 				"iif({MS Zoning} == 5, 'C (all)',",
 				"iif({MS Zoning} == 6, 'A (agr)',",
-				"iif({MS Zoning} == 8, 'I (all)', 'NA')))))))",
-				") ~> derivedColumn1",
+				"iif({MS Zoning} == 8, 'I (all)', 'NA')))))))) ~> derivedColumn1",
 				"derivedColumn1 select(mapColumn(",
 				"          PID,",
 				"          {Lot Frontage},",
@@ -895,14 +876,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select10",
-				"Transformaciones sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1",
-				"join6 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> pruebajoins",
 				"select10 sink(allowSchemaDrift: true,",
 				"     validateSchema: true,",
 				"     partitionFileNames:['output.csv'],",
