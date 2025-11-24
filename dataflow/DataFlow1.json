@@ -45,6 +45,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "DSNeonMsSubClass"
+				},
+				{
+					"dataset": {
+						"referenceName": "GarageCSV",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -205,6 +212,22 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DSNeonMsSubClass",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {Order_$numberLong} as short,",
+				"          {PID_$numberLong} as integer,",
+				"          {Garage Type} as string,",
+				"          {Garage Yr Blt_$numberLong} as short,",
+				"          {Garage Finish} as string,",
+				"          {Garage Cars_$numberLong} as short,",
+				"          {Garage Area_$numberLong} as short,",
+				"          {Garage Qual} as string,",
+				"          {Garage Cond} as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     limit: 100,",
+				"     ignoreNoFilesFound: false) ~> source1",
 				"fuenteCsv cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
