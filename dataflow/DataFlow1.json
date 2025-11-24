@@ -45,6 +45,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "DSNeonMsSubClass"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Bsmt_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -205,6 +212,16 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DSNeonMsSubClass",
+				"source(output(",
+				"          {Bsmt Qual} as string,",
+				"          {Bsmt Cond} as string,",
+				"          {Bsmt Exposure} as string,",
+				"          {BsmtFin Type 1} as string,",
+				"          {BsmtFin Type 2} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
 				"fuenteCsv cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
@@ -380,8 +397,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select7",
-				"LimpiezaNulos derive({Gr Liv Area} = {1st Flr SF} + {2nd Flr SF} + {Low Qual Fin SF}\r",
-				",",
+				"LimpiezaNulos derive({Gr Liv Area} = {1st Flr SF} + {2nd Flr SF} + {Low Qual Fin SF},",
 				"          {Mo Sold} = month({Sale Date}),",
 				"          {Yr Sold} = year({Sale Date}),",
 				"          {Year Remod/Add} = iif({Year Remod/Add} == 0, {Year Built}, {Year Remod/Add})) ~> Transformaciones",
