@@ -51,7 +51,14 @@
 						"referenceName": "GarageCSV",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "GarageCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "miscCSV",
+						"type": "DatasetReference"
+					},
+					"name": "MiscCSV"
 				}
 			],
 			"sinks": [
@@ -226,8 +233,17 @@
 				"     ),",
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> GarageCSV",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {PID_$numberLong} as integer,",
+				"          {Misc Feature} as string,",
+				"          {Misc Val_$numberLong} as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
 				"     limit: 100,",
-				"     ignoreNoFilesFound: false) ~> source1",
+				"     ignoreNoFilesFound: false) ~> MiscCSV",
 				"fuenteCsv cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
