@@ -16,7 +16,7 @@
 						"referenceName": "DS_AmesProperty_CSV",
 						"type": "DatasetReference"
 					},
-					"name": "fuenteCsv"
+					"name": "output"
 				},
 				{
 					"dataset": {
@@ -219,7 +219,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> fuenteCsv",
+				"     ignoreNoFilesFound: false) ~> output",
 				"source(output(",
 				"          pid as long,",
 				"          {Sale Date} as timestamp,",
@@ -311,7 +311,7 @@
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> BsmtCSV",
-				"fuenteCsv cast(output(",
+				"output cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
 				"          {Lot Area} as integer,",
