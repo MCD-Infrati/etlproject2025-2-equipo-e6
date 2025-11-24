@@ -145,7 +145,16 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "pool"
+					},
+					{
+						"name": "Destination",
+						"value": "mongotocsv//pool.csv"
+					}
+				],
 				"typeProperties": {
 					"source": {
 						"type": "MongoDbAtlasSource",
