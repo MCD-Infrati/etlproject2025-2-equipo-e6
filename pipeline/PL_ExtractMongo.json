@@ -123,6 +123,12 @@
 						"referenceName": "ds_mongo_garage",
 						"type": "DatasetReference"
 					}
+				],
+				"outputs": [
+					{
+						"referenceName": "GarageCSV",
+						"type": "DatasetReference"
+					}
 				]
 			},
 			{
@@ -196,6 +202,12 @@
 				"inputs": [
 					{
 						"referenceName": "ds_mongo_pool",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "PoolCSV",
 						"type": "DatasetReference"
 					}
 				]
