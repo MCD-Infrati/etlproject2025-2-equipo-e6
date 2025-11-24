@@ -1,5 +1,5 @@
 {
-	"name": "DS_Salida_CSV",
+	"name": "DS_Join6_Debug",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Mongo_Storage",
@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "salida.csv",
-				"container": "output"
+				"fileName": "join6_output.csv",
+				"container": "mongotocsv"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

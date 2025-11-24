@@ -82,6 +82,17 @@
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Join6_Debug",
+						"type": "DatasetReference"
+					},
+					"name": "pruebajoins",
+					"rejectedDataLinkedService": {
+						"referenceName": "Mongo_Storage",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -251,7 +262,7 @@
 				"source(output(",
 				"          {$oid} as string,",
 				"          {Order_$numberLong} as short,",
-				"          {PID_$numberLong} as integer,",
+				"          {PID_$numberLong} as long,",
 				"          {Garage Type} as string,",
 				"          {Garage Yr Blt_$numberLong} as short,",
 				"          {Garage Finish} as string,",
@@ -534,7 +545,11 @@
 				"Transformaciones sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"join6 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> pruebajoins"
 			]
 		}
 	}
