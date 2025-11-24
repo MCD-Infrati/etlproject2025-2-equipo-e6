@@ -2,7 +2,7 @@
 	"name": "DS_AmesProperty_CSV",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Mongo_Storage",
+			"referenceName": "LS_BlobStorage_Output",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
