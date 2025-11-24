@@ -100,7 +100,7 @@
 					"name": "select7"
 				},
 				{
-					"name": "GrLivArea"
+					"name": "Transformaciones"
 				}
 			],
 			"scriptLines": [
@@ -384,8 +384,8 @@
 				",",
 				"          {Mo Sold} = month({Sale Date}),",
 				"          {Yr Sold} = year({Sale Date}),",
-				"          {Year Remod/Add} = iif({Year Remod/Add} == 0, {Year Built}, {Year Remod/Add})) ~> GrLivArea",
-				"join2 sink(allowSchemaDrift: true,",
+				"          {Year Remod/Add} = iif({Year Remod/Add} == 0, {Year Built}, {Year Remod/Add})) ~> Transformaciones",
+				"Transformaciones sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1"
