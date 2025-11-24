@@ -2,7 +2,7 @@
 	"name": "DS_Pool_CSV",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Mongo_BlobStorage_Output",
+			"referenceName": "Mongo_Storage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
