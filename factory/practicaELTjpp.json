@@ -1,0 +1,9 @@
+{
+	"name": "practicaELTjpp",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1de581cf-cf37-4d35-b9b4-a0957f558c8b",
+		"tenantId": "e994072b-523e-4bfe-86e2-442c5e10b244"
+	}
+}
