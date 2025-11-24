@@ -100,7 +100,7 @@
 					"name": "select7"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "GrLivArea"
 				}
 			],
 			"scriptLines": [
@@ -380,7 +380,11 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select7",
-				"LimpiezaNulos derive() ~> derivedColumn1",
+				"LimpiezaNulos derive({Gr Liv Area} = {1st Flr SF} + {2nd Flr SF} + {Low Qual Fin SF}\r",
+				",",
+				"          {Mo Sold} = month({Sale Date}),",
+				"          {Yr Sold} = year({Sale Date}),",
+				"          {Year Remod/Add} = iif({Year Remod/Add} == 0, {Year Built}, {Year Remod/Add})) ~> GrLivArea",
 				"join2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
