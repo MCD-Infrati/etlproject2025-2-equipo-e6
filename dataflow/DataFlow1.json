@@ -580,8 +580,8 @@
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join9",
 				"join9 select(mapColumn(",
-				"          each(match(/* All input columns */ true()),",
-				"               /* Input name */ $$ = $$)",
+				"          each(match(/* All input columns */true()),",
+				"               /* Input name */$$ = $$)",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select8",
@@ -597,8 +597,8 @@
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> pruebajoins",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
+				"derivedColumn1 sink(allowSchemaDrift: false,",
+				"     validateSchema: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink2"
 			]
