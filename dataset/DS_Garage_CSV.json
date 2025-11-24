@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "garage.csv",
-				"container": "mongotocsv"
+				"fileName": "DS_Garage_CSV",
+				"container": "proyectofinal"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
