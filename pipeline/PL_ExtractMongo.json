@@ -38,12 +38,6 @@
 						"referenceName": "MongoDbBsmt",
 						"type": "DatasetReference"
 					}
-				],
-				"outputs": [
-					{
-						"referenceName": "DS_Bsmt_CSV",
-						"type": "DatasetReference"
-					}
 				]
 			},
 			{
@@ -80,12 +74,6 @@
 				"inputs": [
 					{
 						"referenceName": "MongoDbGarage",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "DS_Garage_CSV",
 						"type": "DatasetReference"
 					}
 				]

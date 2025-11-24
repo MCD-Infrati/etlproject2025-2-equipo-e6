@@ -45,13 +45,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "DSNeonMsSubClass"
-				},
-				{
-					"dataset": {
-						"referenceName": "DS_Bsmt_CSV",
-						"type": "DatasetReference"
-					},
-					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -212,16 +205,6 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DSNeonMsSubClass",
-				"source(output(",
-				"          {Bsmt Qual} as string,",
-				"          {Bsmt Cond} as string,",
-				"          {Bsmt Exposure} as string,",
-				"          {BsmtFin Type 1} as string,",
-				"          {BsmtFin Type 2} as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
 				"fuenteCsv cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
