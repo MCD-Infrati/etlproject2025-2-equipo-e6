@@ -13,10 +13,10 @@
 				"fileName": "pool.csv",
 				"container": "mongotocsv"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "\"",
 			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": "\""
+			"firstRowAsHeader": false,
+			"quoteChar": null
 		},
 		"schema": []
 	}
