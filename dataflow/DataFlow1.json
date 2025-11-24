@@ -59,6 +59,20 @@
 						"type": "DatasetReference"
 					},
 					"name": "MiscCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "PoolCSV",
+						"type": "DatasetReference"
+					},
+					"name": "PoolCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "BsmtCSV",
+						"type": "DatasetReference"
+					},
+					"name": "BsmtCSV"
 				}
 			],
 			"sinks": [
@@ -244,6 +258,33 @@
 				"     validateSchema: false,",
 				"     limit: 100,",
 				"     ignoreNoFilesFound: false) ~> MiscCSV",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {PID_$numberLong} as integer,",
+				"          {Pool Area_$numberLong} as short,",
+				"          {Pool QC} as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> PoolCSV",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {PID_$numberLong} as integer,",
+				"          {Bsmt Qual} as string,",
+				"          {Bsmt Cond} as string,",
+				"          {Bsmt Exposure} as string,",
+				"          {BsmtFin Type 1} as string,",
+				"          {BsmtFin SF 1_$numberLong} as short,",
+				"          {BsmtFin Type 2} as string,",
+				"          {BsmtFin SF 2_$numberLong} as short,",
+				"          {Bsmt Unf SF_$numberLong} as short,",
+				"          {Total Bsmt SF_$numberLong} as short,",
+				"          {Bsmt Full Bath_$numberLong} as short,",
+				"          {Bsmt Half Bath_$numberLong} as boolean",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> BsmtCSV",
 				"fuenteCsv cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
