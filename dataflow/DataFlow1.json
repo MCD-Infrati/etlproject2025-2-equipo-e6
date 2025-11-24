@@ -129,6 +129,21 @@
 				},
 				{
 					"name": "Transformaciones"
+				},
+				{
+					"name": "selectGarage"
+				},
+				{
+					"name": "selectMisc"
+				},
+				{
+					"name": "selectPool"
+				},
+				{
+					"name": "selectBsmt"
+				},
+				{
+					"name": "join6"
 				}
 			],
 			"scriptLines": [
@@ -464,6 +479,58 @@
 				"          {Mo Sold} = month({Sale Date}),",
 				"          {Yr Sold} = year({Sale Date}),",
 				"          {Year Remod/Add} = iif({Year Remod/Add} == 0, {Year Built}, {Year Remod/Add})) ~> Transformaciones",
+				"GarageCSV select(mapColumn(",
+				"          {$oid},",
+				"          Order = {Order_$numberLong},",
+				"          PID = {PID_$numberLong},",
+				"          GarageType = {Garage Type},",
+				"          GarageYrBlt = {Garage Yr Blt_$numberLong},",
+				"          GarageFinish = {Garage Finish},",
+				"          GarageCars = {Garage Cars_$numberLong},",
+				"          GarageArea = {Garage Area_$numberLong},",
+				"          GarageQual = {Garage Qual},",
+				"          GarageCond = {Garage Cond}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectGarage",
+				"MiscCSV select(mapColumn(",
+				"          {$oid},",
+				"          PID = {PID_$numberLong},",
+				"          MiscFeature = {Misc Feature},",
+				"          MiscVal = {Misc Val_$numberLong}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectMisc",
+				"PoolCSV select(mapColumn(",
+				"          {$oid},",
+				"          PID = {PID_$numberLong},",
+				"          PoolArea = {Pool Area_$numberLong},",
+				"          PoolQC = {Pool QC}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectPool",
+				"BsmtCSV select(mapColumn(",
+				"          {$oid},",
+				"          PID = {PID_$numberLong},",
+				"          BsmtQual = {Bsmt Qual},",
+				"          BsmtExposure = {Bsmt Exposure},",
+				"          BsmtCond = {Bsmt Cond},",
+				"          {BsmtFinType 1} = {BsmtFin Type 1},",
+				"          BsmtFinSF1 = {BsmtFin SF 1_$numberLong},",
+				"          BsmtFinType2 = {BsmtFin Type 2},",
+				"          BsmtFinSF2 = {BsmtFin SF 2_$numberLong},",
+				"          BsmtUnfSF = {Bsmt Unf SF_$numberLong},",
+				"          TotalBsmtSF = {Total Bsmt SF_$numberLong},",
+				"          BsmtFullBath = {Bsmt Full Bath_$numberLong},",
+				"          BsmtHalfBath = {Bsmt Half Bath_$numberLong}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectBsmt",
+				"selectGarage, join5 join(selectGarage@PID == cast1@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join6",
 				"Transformaciones sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
