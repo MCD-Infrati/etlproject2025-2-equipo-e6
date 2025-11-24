@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "bsmt.csv",
-				"container": "mongotocsv"
+				"container": "practicaicesijpp"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
