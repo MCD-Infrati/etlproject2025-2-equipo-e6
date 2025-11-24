@@ -93,6 +93,13 @@
 						"referenceName": "Mongo_Storage",
 						"type": "LinkedServiceReference"
 					}
+				},
+				{
+					"dataset": {
+						"referenceName": "output_final",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
 				}
 			],
 			"transformations": [
@@ -549,29 +556,29 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectBsmt",
-				"join5, selectGarage join(selectGarage@PID == cast1@PID,",
+				"Transformaciones, selectGarage join(LimpiezaNulos@PID == selectGarage@PID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join6",
-				"join6, selectPool join(selectPool@PID == cast1@PID,",
+				"join6, selectPool join(selectGarage@PID == selectPool@PID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join7",
-				"join7, selectBsmt join(selectBsmt@PID == cast1@PID,",
+				"join7, selectBsmt join(selectGarage@PID == selectBsmt@PID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join8",
-				"join8, selectMisc join(selectMisc@PID == cast1@PID,",
+				"join8, selectMisc join(selectMisc@PID == selectMisc@PID,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join9",
 				"join9 select(mapColumn(",
-				"          each(match(/* All input columns */ true()),",
-				"               /* Input name */ $$ = $$)",
+				"          each(match(/* All input columns */true()),",
+				"               /* Input name */$$ = $$)",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select8",
@@ -582,7 +589,11 @@
 				"join6 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> pruebajoins"
+				"     skipDuplicateMapOutputs: true) ~> pruebajoins",
+				"select8 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
 			]
 		}
 	}
