@@ -9,7 +9,7 @@
 						"referenceName": "DS_Neon_amesdbtemp",
 						"type": "DatasetReference"
 					},
-					"name": "fuentePostgres"
+					"name": "DSNeonamesdbtemp"
 				},
 				{
 					"dataset": {
@@ -17,6 +17,34 @@
 						"type": "DatasetReference"
 					},
 					"name": "fuenteCsv"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Neon_SaleProperty",
+						"type": "DatasetReference"
+					},
+					"name": "DSNeonSaleProperty"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Neon_FloorDetail",
+						"type": "DatasetReference"
+					},
+					"name": "DSNeonFloorDetail"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Neon_MsZoning",
+						"type": "DatasetReference"
+					},
+					"name": "DSNeonMsZooning"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Neon_MsSubClass",
+						"type": "DatasetReference"
+					},
+					"name": "DSNeonMsSubClass"
 				}
 			],
 			"sinks": [
@@ -25,15 +53,48 @@
 						"referenceName": "DS_Salida_CSV",
 						"type": "DatasetReference"
 					},
-					"name": "salidaCsv"
+					"name": "sink1"
 				}
 			],
 			"transformations": [
 				{
+					"name": "cast1"
+				},
+				{
 					"name": "join1"
 				},
 				{
-					"name": "cast1"
+					"name": "join2"
+				},
+				{
+					"name": "FloorAgg"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "join4"
+				},
+				{
+					"name": "join5"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "select3"
+				},
+				{
+					"name": "select4"
+				},
+				{
+					"name": "select5"
+				},
+				{
+					"name": "select6"
 				}
 			],
 			"scriptLines": [
@@ -74,7 +135,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> fuentePostgres",
+				"     format: 'table') ~> DSNeonamesdbtemp",
 				"source(output(",
 				"          PID as string,",
 				"          {Lot Frontage} as string,",
@@ -99,11 +160,45 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> fuenteCsv",
-				"cast1, fuentePostgres join(cast1@PID == fuentePostgres@pid,",
-				"     joinType:'left',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
+				"source(output(",
+				"          pid as long,",
+				"          {Sale Date} as timestamp,",
+				"          {Sale Type} as string,",
+				"          {Sale Condition} as string,",
+				"          saleprice as long",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DSNeonSaleProperty",
+				"source(output(",
+				"          pid as long,",
+				"          Floor as long,",
+				"          bedrooms as long,",
+				"          {Full Bath} as long,",
+				"          {Half Bath} as long",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DSNeonFloorDetail",
+				"source(output(",
+				"          id as long,",
+				"          description as string,",
+				"          code as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DSNeonMsZooning",
+				"source(output(",
+				"          description as string,",
+				"          code as long",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DSNeonMsSubClass",
 				"fuenteCsv cast(output(",
 				"          PID as integer,",
 				"          {Lot Frontage} as integer,",
@@ -114,10 +209,109 @@
 				"          {Year Remod/Add} as integer",
 				"     ),",
 				"     errors: true) ~> cast1",
-				"join1 sink(allowSchemaDrift: true,",
+				"cast1, select6 join(cast1@PID == select6@PID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, DSNeonSaleProperty join(cast1@PID == DSNeonSaleProperty@pid,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"select3 aggregate(groupBy(PID),",
+				"     TotalFullBath = sum({Full Bath}),",
+				"          TotalHalfBath = sum({Half Bath}),",
+				"          TotalBedrooms = sum(bedrooms)) ~> FloorAgg",
+				"join2, FloorAgg join(cast1@PID == FloorAgg@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3, DSNeonMsZooning join({MS Zoning} == id,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join4",
+				"join4, DSNeonMsSubClass join({MS SubClass} == {code MSsubclass},",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join5",
+				"join5 derive(each(match(type=='integer'), $$ = iifNull($$, 0)),",
+				"          each(match(type=='string'), $$ = iifNull($$, 'NA')),",
+				"          each(match(type=='long'), $$ = iifNull($$, 0))) ~> derivedColumn1",
+				"DSNeonMsSubClass select(mapColumn(",
+				"          {description MsSubClass} = description,",
+				"          {code MsSubClass} = code",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"DSNeonFloorDetail select(mapColumn(",
+				"          PID = pid,",
+				"          Floor,",
+				"          bedrooms,",
+				"          {Full Bath},",
+				"          {Half Bath}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"DSNeonSaleProperty select(mapColumn(",
+				"          PID = pid,",
+				"          {Sale Date},",
+				"          {Sale Type},",
+				"          {Sale Condition},",
+				"          saleprice",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select4",
+				"DSNeonMsZooning select(mapColumn(",
+				"          id,",
+				"          {description MsZoning} = description,",
+				"          {code MsZoning} = code",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select5",
+				"DSNeonamesdbtemp select(mapColumn(",
+				"          {Exter Cond},",
+				"          {Exter Qual},",
+				"          {Heating QC},",
+				"          {Kitchen Qual},",
+				"          {MS Zoning},",
+				"          PID = pid,",
+				"          {Roof Style},",
+				"          {Roof Matl},",
+				"          {Exterior 1st},",
+				"          {Exterior 2nd},",
+				"          {Mas Vnr Type},",
+				"          {Mas Vnr Area},",
+				"          foundation,",
+				"          heating,",
+				"          {Central Air},",
+				"          electrical,",
+				"          {1st Flr SF},",
+				"          {2nd Flr SF},",
+				"          {Low Qual Fin SF},",
+				"          {Kitchen AbvGr},",
+				"          {TotRms AbvGrd},",
+				"          functional,",
+				"          fireplaces,",
+				"          {Fireplace Qu},",
+				"          {Paved Drive},",
+				"          {Wood Deck SF},",
+				"          {Open Porch SF},",
+				"          {Enclosed Porch},",
+				"          {3Ssn Porch},",
+				"          {Screen Porch},",
+				"          fence,",
+				"          {MS SubClass}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select6",
+				"join2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> salidaCsv"
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
