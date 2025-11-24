@@ -1,5 +1,5 @@
 {
-	"name": "MongoDbGarage",
+	"name": "ds_mongo_pool",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "MongoConn",
@@ -9,7 +9,7 @@
 		"type": "MongoDbAtlasCollection",
 		"schema": [],
 		"typeProperties": {
-			"collection": "garage"
+			"collection": "pool"
 		}
 	}
 }

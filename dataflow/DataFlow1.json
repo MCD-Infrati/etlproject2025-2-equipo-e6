@@ -16,7 +16,7 @@
 						"referenceName": "DS_AmesProperty_CSV",
 						"type": "DatasetReference"
 					},
-					"name": "fuenteCsv"
+					"name": "output"
 				},
 				{
 					"dataset": {
@@ -45,6 +45,34 @@
 						"type": "DatasetReference"
 					},
 					"name": "DSNeonMsSubClass"
+				},
+				{
+					"dataset": {
+						"referenceName": "GarageCSV",
+						"type": "DatasetReference"
+					},
+					"name": "GarageCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "miscCSV",
+						"type": "DatasetReference"
+					},
+					"name": "MiscCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "PoolCSV",
+						"type": "DatasetReference"
+					},
+					"name": "PoolCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "BsmtCSV",
+						"type": "DatasetReference"
+					},
+					"name": "BsmtCSV"
 				}
 			],
 			"sinks": [
@@ -54,6 +82,24 @@
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Join6_Debug",
+						"type": "DatasetReference"
+					},
+					"name": "pruebajoins",
+					"rejectedDataLinkedService": {
+						"referenceName": "Mongo_Storage",
+						"type": "LinkedServiceReference"
+					}
+				},
+				{
+					"dataset": {
+						"referenceName": "output_final",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
 				}
 			],
 			"transformations": [
@@ -101,6 +147,33 @@
 				},
 				{
 					"name": "Transformaciones"
+				},
+				{
+					"name": "selectGarage"
+				},
+				{
+					"name": "selectMisc"
+				},
+				{
+					"name": "selectPool"
+				},
+				{
+					"name": "selectBsmt"
+				},
+				{
+					"name": "join6"
+				},
+				{
+					"name": "join7"
+				},
+				{
+					"name": "join8"
+				},
+				{
+					"name": "join9"
+				},
+				{
+					"name": "select8"
 				}
 			],
 			"scriptLines": [
@@ -165,7 +238,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> fuenteCsv",
+				"     ignoreNoFilesFound: false) ~> output",
 				"source(output(",
 				"          pid as long,",
 				"          {Sale Date} as timestamp,",
@@ -205,7 +278,59 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DSNeonMsSubClass",
-				"fuenteCsv cast(output(",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {Order_$numberLong} as short,",
+				"          {PID_$numberLong} as long,",
+				"          {Garage Type} as string,",
+				"          {Garage Yr Blt_$numberLong} as short,",
+				"          {Garage Finish} as string,",
+				"          {Garage Cars_$numberLong} as short,",
+				"          {Garage Area_$numberLong} as short,",
+				"          {Garage Qual} as string,",
+				"          {Garage Cond} as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> GarageCSV",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {PID_$numberLong} as integer,",
+				"          {Misc Feature} as string,",
+				"          {Misc Val_$numberLong} as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 100,",
+				"     ignoreNoFilesFound: false) ~> MiscCSV",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {PID_$numberLong} as integer,",
+				"          {Pool Area_$numberLong} as short,",
+				"          {Pool QC} as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> PoolCSV",
+				"source(output(",
+				"          {$oid} as string,",
+				"          {PID_$numberLong} as integer,",
+				"          {Bsmt Qual} as string,",
+				"          {Bsmt Cond} as string,",
+				"          {Bsmt Exposure} as string,",
+				"          {BsmtFin Type 1} as string,",
+				"          {BsmtFin SF 1_$numberLong} as short,",
+				"          {BsmtFin Type 2} as string,",
+				"          {BsmtFin SF 2_$numberLong} as short,",
+				"          {Bsmt Unf SF_$numberLong} as short,",
+				"          {Total Bsmt SF_$numberLong} as short,",
+				"          {Bsmt Full Bath_$numberLong} as short,",
+				"          {Bsmt Half Bath_$numberLong} as boolean",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> BsmtCSV",
+				"output cast(output(",
 				"          PID as long,",
 				"          {Lot Frontage} as integer,",
 				"          {Lot Area} as integer,",
@@ -384,10 +509,91 @@
 				"          {Mo Sold} = month({Sale Date}),",
 				"          {Yr Sold} = year({Sale Date}),",
 				"          {Year Remod/Add} = iif({Year Remod/Add} == 0, {Year Built}, {Year Remod/Add})) ~> Transformaciones",
+				"GarageCSV select(mapColumn(",
+				"          {$oid},",
+				"          Order = {Order_$numberLong},",
+				"          PID = {PID_$numberLong},",
+				"          GarageType = {Garage Type},",
+				"          GarageYrBlt = {Garage Yr Blt_$numberLong},",
+				"          GarageFinish = {Garage Finish},",
+				"          GarageCars = {Garage Cars_$numberLong},",
+				"          GarageArea = {Garage Area_$numberLong},",
+				"          GarageQual = {Garage Qual},",
+				"          GarageCond = {Garage Cond}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectGarage",
+				"MiscCSV select(mapColumn(",
+				"          {$oid},",
+				"          PID = {PID_$numberLong},",
+				"          MiscFeature = {Misc Feature},",
+				"          MiscVal = {Misc Val_$numberLong}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectMisc",
+				"PoolCSV select(mapColumn(",
+				"          {$oid},",
+				"          PID = {PID_$numberLong},",
+				"          PoolArea = {Pool Area_$numberLong},",
+				"          PoolQC = {Pool QC}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectPool",
+				"BsmtCSV select(mapColumn(",
+				"          {$oid},",
+				"          PID = {PID_$numberLong},",
+				"          BsmtQual = {Bsmt Qual},",
+				"          BsmtExposure = {Bsmt Exposure},",
+				"          BsmtCond = {Bsmt Cond},",
+				"          {BsmtFinType 1} = {BsmtFin Type 1},",
+				"          BsmtFinSF1 = {BsmtFin SF 1_$numberLong},",
+				"          BsmtFinType2 = {BsmtFin Type 2},",
+				"          BsmtFinSF2 = {BsmtFin SF 2_$numberLong},",
+				"          BsmtUnfSF = {Bsmt Unf SF_$numberLong},",
+				"          TotalBsmtSF = {Total Bsmt SF_$numberLong},",
+				"          BsmtFullBath = {Bsmt Full Bath_$numberLong},",
+				"          BsmtHalfBath = {Bsmt Half Bath_$numberLong}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectBsmt",
+				"Transformaciones, selectGarage join(LimpiezaNulos@PID == selectGarage@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join6",
+				"join6, selectPool join(selectGarage@PID == selectPool@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join7",
+				"join7, selectBsmt join(selectGarage@PID == selectBsmt@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join8",
+				"join8, selectMisc join(selectPool@PID == selectMisc@PID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join9",
+				"join9 select(mapColumn(",
+				"          each(match(/* All input columns */true()),",
+				"               /* Input name */$$ = $$)",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select8",
 				"Transformaciones sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"join6 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> pruebajoins",
+				"select8 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
 			]
 		}
 	}
