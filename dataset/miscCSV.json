@@ -1,8 +1,8 @@
 {
-	"name": "DS_Pool_CSV",
+	"name": "miscCSV",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Mongo_BlobStorage_Output",
+			"referenceName": "Mongo_Storage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "pool.csv",
+				"fileName": "misc.csv",
 				"container": "mongotocsv"
 			},
 			"columnDelimiter": ",",

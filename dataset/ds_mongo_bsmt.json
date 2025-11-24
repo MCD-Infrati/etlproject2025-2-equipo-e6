@@ -1,5 +1,5 @@
 {
-	"name": "MongoDbPool",
+	"name": "ds_mongo_bsmt",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "MongoConn",
@@ -9,7 +9,7 @@
 		"type": "MongoDbAtlasCollection",
 		"schema": [],
 		"typeProperties": {
-			"collection": "pool"
+			"collection": "bsmt"
 		}
 	}
 }

@@ -1,8 +1,8 @@
 {
-	"name": "DS_Garage_CSV",
+	"name": "output_final",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Mongo_BlobStorage_Output",
+			"referenceName": "Mongo_Storage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "garage.csv",
-				"container": "mongotocsv"
+				"container": "output"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
