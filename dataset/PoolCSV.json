@@ -1,0 +1,23 @@
+{
+	"name": "PoolCSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Mongo_Storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "pool.csv",
+				"container": "mongotocsv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

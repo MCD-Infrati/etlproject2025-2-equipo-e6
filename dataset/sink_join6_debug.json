@@ -1,0 +1,23 @@
+{
+	"name": "sink_join6_debug",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Mongo_Storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "sink_join6",
+				"container": "mongotocsv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
